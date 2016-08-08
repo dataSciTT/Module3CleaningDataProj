@@ -42,7 +42,8 @@ for(i in 1:length(activityfiles)){
 
 activityLable <- data.table(read.table("activity_labels.txt"))
 
-adtL <- merge(adt, activityLable, all = TRUE, by = c("V1"))
+# add sort=F to prevent the data is sorted after merge which cause error when previously
+adtL <- merge(adt, activityLable, all = TRUE, by = c("V1"),sort = F)
 
 cdt.s$activity = adtL$V2
 
@@ -61,6 +62,7 @@ cdt.s$participant = pdt
 #This takes the mean of every column broken down by participants and activities
 print("calculate mean for every column broken down by participants and activities")
 TidyData <- cdt.s[, lapply(.SD, mean), by = 'participant,activity']
+
 print("generate tidyData.csv in the working directory")
-write.csv(TidyData, "tidyData.csv", row.names = FALSE, quote = FALSE)
+write.table(TidyData,"tidyData.txt", row.names = FALSE, quote = FALSE)
 print("run_analysis.r is ended")
